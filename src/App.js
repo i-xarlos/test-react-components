@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 
-function Todo({ todo, index, completeTodo, removeTodo }) {
+export function Todo({ todo, index, completeTodo, removeTodo }) {
   return (
     <div
       className="todo"
@@ -17,10 +17,10 @@ function Todo({ todo, index, completeTodo, removeTodo }) {
   );
 }
 
-function TodoForm({ addTodo }) {
+export function TodoForm({ addTodo }) {
   const [value, setValue] = useState("");
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!value) return;
     addTodo(value);
@@ -33,45 +33,50 @@ function TodoForm({ addTodo }) {
         type="text"
         className="input"
         value={value}
-        onChange={e => setValue(e.target.value)}
+        onChange={(e) => setValue(e.target.value)}
       />
     </form>
   );
 }
 
-function App() {
+export const useTodos = () => {
   const [todos, setTodos] = useState([
     {
       text: "Todo 1",
-      isCompleted: false
+      isCompleted: false,
     },
     {
       text: "Todo 2",
-      isCompleted: false
+      isCompleted: false,
     },
     {
       text: "Todo 3",
-      isCompleted: false
-    }
+      isCompleted: false,
+    },
   ]);
 
-  const addTodo = text => {
+  const addTodo = (text) => {
     const newTodos = [{ text }, ...todos];
     setTodos(newTodos);
   };
 
-  const completeTodo = index => {
+  const completeTodo = (index) => {
     const newTodos = [...todos];
     newTodos[index].isCompleted = true;
     setTodos(newTodos);
   };
 
-  const removeTodo = index => {
+  const removeTodo = (index) => {
     const newTodos = [...todos];
     newTodos.splice(index, 1);
     setTodos(newTodos);
   };
 
+  return { todos, addTodo, completeTodo, removeTodo };
+};
+
+function App() {
+  const { todos, addTodo, completeTodo, removeTodo } = useTodos();
   return (
     <div className="app">
       <div className="todo-list">
