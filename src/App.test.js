@@ -1,7 +1,7 @@
 import React from "react";
-//import ReactDOM from "react-dom";
+import ReactDOM from "react-dom";
 import App, { Todo, TodoForm, useTodos } from "./App";
-import { shallow, configure } from "enzyme";
+import { shallow, mount, configure } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
 configure({ adapter: new Adapter() });
@@ -124,6 +124,21 @@ describe("App", () => {
           isCompleted: false,
         },
       ]);
+    });
+    it("App", () => {
+      const wrapper = mount(<App />);
+      const prevent = jest.fn();
+
+      wrapper
+        .find("input")
+        .simulate("change", { target: { value: "mi todo!" } });
+
+      wrapper.find("form").simulate("submit", { preventDefault: prevent });
+
+      const respuesta = wrapper.find(".todo").at(0).text().includes("mi todo!");
+
+      expect(respuesta).toEqual(true);
+      expect(prevent.mock.calls).toEqual([[]]);
     });
   });
 });
